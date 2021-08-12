@@ -15,49 +15,54 @@ use App\models\Product;
 |
 */
 
+
+
+
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('products', function () {
+        // $products = Product::all();
+        $products = Product::orderBy('created_at', 'desc')->get();
+        return view('products.index', compact('products'));
+    })->name('products.index');
 
-Route::get('products', function () {
-    // $products = Product::all();
-    $products = Product::orderBy('created_at', 'desc')->get();
-    return view('products.index', compact('products'));
-})->name('products.index');
+    Route::get('products/create', function () {
+        return view('products.create');
+    })->name('products.create');
 
-Route::get('products/create', function () {
-    return view('products.create');
-})->name('products.create');
-
-Route::post('products', function (Request $request) {
-    $newProduct = new Product;
-    $newProduct->description = $request->input('description');
-    $newProduct->price = $request->input('price');
-    $newProduct->save();
-    // return $request->all();
-    return redirect()->route('products.index')->with('info', 'Producto Creado Exitosamente');
-})->name('products.store');
-
-
-
-Route::delete('products/{id}', function ($id) {
-    $product = Product::findOrFail($id);
-    $product->delete();
-    return redirect()->route('products.index')->with('info', 'Producto Eliminado Exitosamente');
-})->name('products.destroy');
+    Route::post('products', function (Request $request) {
+        $newProduct = new Product;
+        $newProduct->description = $request->input('description');
+        $newProduct->price = $request->input('price');
+        $newProduct->save();
+        // return $request->all();
+        return redirect()->route('products.index')->with('info', 'Producto Creado Exitosamente');
+    })->name('products.store');
 
 
-Route::get('products/{id}/edit', function ($id) {
-    $product = Product::findOrFail($id);
-    return view('products.edit', compact('product'));
-})->name('products.edit');
+
+    Route::delete('products/{id}', function ($id) {
+        $product = Product::findOrFail($id);
+        $product->delete();
+        return redirect()->route('products.index')->with('info', 'Producto Eliminado Exitosamente');
+    })->name('products.destroy');
 
 
-Route::put('/products/{id}', function (Request $request, $id) {
-    $product = Product::findOrFail($id);
-    $product->description = $request->input('description');
-    $product->price = $request->input('price');
-    $product->save();
-    return redirect()->route('products.index')->with('info', 'Producto Actualizado Exitosamente');
-})->name('products.update');
+    Route::get('products/{id}/edit', function ($id) {
+        $product = Product::findOrFail($id);
+        return view('products.edit', compact('product'));
+    })->name('products.edit');
+
+
+    Route::put('/products/{id}', function (Request $request, $id) {
+        $product = Product::findOrFail($id);
+        $product->description = $request->input('description');
+        $product->price = $request->input('price');
+        $product->save();
+        return redirect()->route('products.index')->with('info', 'Producto Actualizado Exitosamente');
+    })->name('products.update');
+});
+Auth::routes();

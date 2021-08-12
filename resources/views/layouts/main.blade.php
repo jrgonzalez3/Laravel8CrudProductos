@@ -13,6 +13,7 @@
 </head>
 
 <body>
+
     <div class="container">
         <br>
         @yield('contenido')
@@ -24,6 +25,8 @@
         <div class="footer mr-2" style="float:right; margin:2em">
             <p>&copy 2021 - Jrgonzalez3</p>
         </div>
+
+
     </footer>
 
 </body>

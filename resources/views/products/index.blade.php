@@ -43,6 +43,18 @@
                 </tbody>
             </table>
         </div>
+        <div class="card-footer">
+            Usuario Activo {{ auth()->user()->name}}
+            <a href="javascript:document.getElementById('logout').submit()" class="btn btn-danger"
+                style="float:right">Cerrar
+                Sesion</a>
+            </td>
+            <form id="logout" action="{{route('logout')}}" method="POST">
+                @csrf
+            </form>
+
+        </div>
     </div>
+
 </div>
 @endsection
